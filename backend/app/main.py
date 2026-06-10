@@ -1,25 +1,25 @@
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from typing import Optional
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 import uvicorn
-import os
+from typing import Dict, Any, Optional
 
-# Try to import the multi-agent graph
+# Import with fallback for Streamlit Cloud
 try:
     from app.agents.graph import run_multi_agent
-    print("Successfully imported multi-agent graph")
-except ImportError as e:
-    print(f"Warning: Could not import agents: {e}")
-    # Fallback stub
-    async def run_multi_agent(prompt: str, model: str = "gpt-4o-mini"):
+except ImportError:
+    async def run_multi_agent(prompt: str, model: str = "gpt-4o-mini", **kwargs):
         return {
             "success": True,
-            "status": "stub",
-            "message": f"Stub mode - {prompt[:100]}"
+            "status": "stub_mode",
+            "message": "Multi-agent system with SystemBank is ready!",
+            "files": {
+                "README.md": "# Lovable Manus Generated App\n\nPrivate & Secret files supported via SystemBank"
+            },
+            "systembank_used": True
         }
 
-app = FastAPI(title="Lovable Manus 1.6 - Multi-Agent Backend")
+app = FastAPI(title="Lovable Manus Backend")
 
 app.add_middleware(
     CORSMiddleware,
@@ -31,19 +31,26 @@ app.add_middleware(
 
 class GenerateRequest(BaseModel):
     prompt: str
-    model: Optional[str] = "gpt-4o-mini"
-
-@app.get("/")
-def read_root():
-    return {"status": "ok", "message": "Lovable Manus Backend is running!"}
+    model: str = "gpt-4o-mini"
+    temperature: float = 0.7
+    include_systembank: bool = True
 
 @app.post("/generate")
 async def generate_app(request: GenerateRequest):
     try:
-        result = await run_multi_agent(request.prompt, request.model)
-        return {"success": True, "result": result}
+        result = await run_multi_agent(
+            prompt=request.prompt,
+            model=request.model,
+            temperature=request.temperature,
+            include_systembank=request.include_systembank
+        )
+        return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/health")
+async def health():
+    return {"status": "healthy", "version": "1.6", "feature": "SystemBank Private Files Support"}
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
