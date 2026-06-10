@@ -1,15 +1,5 @@
 fastapi
 uvicorn[standard]
-langgraph
-langchain
-langchain-community
-langchain-openai
-docker
-psycopg2-binary
-pgvector
+pydantic
 python-dotenv
 httpx
-litellm
-pydantic
-python-multipart
-aiofiles

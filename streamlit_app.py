@@ -1,54 +1,56 @@
 import streamlit as st
 import requests
 import os
+from typing import Optional
 
-st.set_page_config(page_title="Lovable Manus", layout="wide")
-st.title("🤖 Lovable Manus 1.6")
-st.markdown("### AI Assistant with FastAPI Backend")
+st.set_page_config(page_title="Lovable Manus 1.6", layout="wide")
+st.title("🦾 Lovable Manus 1.6")
+st.subheader("True Multi-Agent App Generator")
 
-# Configuration
-BASE_URL = os.getenv("BACKEND_URL", "http://127.0.0.1:8000")
+st.markdown("---")
 
-st.sidebar.info(f"Backend: {BASE_URL}")
+col1, col2 = st.columns([3,1])
 
-# Test connection
-if st.button("🔍 Test Backend Connection"):
-    try:
-        r = requests.get(f"{BASE_URL}/health", timeout=5)
-        if r.status_code == 200:
-            st.success("✅ Backend is running!")
-            st.json(r.json())
-        else:
-            st.warning(f"Backend responded with status {r.status_code}")
-    except Exception as e:
-        st.error(f"Cannot connect to backend: {str(e)}")
-        st.info("💡 Tip: Deploy your FastAPI backend separately and set BACKEND_URL in Streamlit Secrets.")
+with col1:
+    prompt = st.text_area(
+        "Describe the app you want to build (ภาษาไทยได้)",
+        height=200,
+        placeholder="สร้างเว็บแอพ Todo List ด้วย Next.js + Tailwind + Supabase..."
+    )
 
-st.divider()
+with col2:
+    model = st.selectbox(
+        "เลือก Model",
+        ["gpt-4o-mini", "gpt-4o", "claude-3-5-sonnet"],
+        index=0
+    )
 
-st.subheader("Chat Interface")
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+if st.button("🚀 Generate App", type="primary", use_container_width=True):
+    if not prompt.strip():
+        st.error("กรุณาใส่ prompt")
+    else:
+        with st.spinner("กำลังรัน Multi-Agent System... (อาจใช้เวลา 30-90 วินาที)"):
+            try:
+                # Call backend (change URL if you deploy backend separately)
+                backend_url = os.getenv("BACKEND_URL", "http://localhost:8000")
+                response = requests.post(
+                    f"{backend_url}/generate",
+                    json={"prompt": prompt, "model": model},
+                    timeout=180
+                )
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    if data.get("success"):
+                        st.success("✅ Generation Complete!")
+                        st.json(data.get("result", {}))
+                    else:
+                        st.error(data.get("message", "Unknown error"))
+                else:
+                    st.error(f"Backend error: {response.text}")
+            except Exception as e:
+                st.error(f"Connection error: {str(e)}")
+                st.info("💡 Hint: Deploy backend separately on Railway/Render and set BACKEND_URL")
 
-for msg in st.session_state.messages:
-    with st.chat_message(msg["role"]):
-        st.markdown(msg["content"])
-
-if prompt := st.chat_input("พิมพ์ข้อความที่นี่..."):
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.markdown(prompt)
-    
-    try:
-        r = requests.post(f"{BASE_URL}/chat", json={"message": prompt}, timeout=30)
-        if r.status_code == 200:
-            reply = r.json().get("reply", "No response")
-            st.session_state.messages.append({"role": "assistant", "content": reply})
-            with st.chat_message("assistant"):
-                st.markdown(reply)
-        else:
-            st.error("Backend error")
-    except:
-        st.error("Cannot reach backend. Please deploy backend separately.")
-
-st.caption("Streamlit Cloud Frontend - Backend ต้อง deploy แยก")
+st.markdown("---")
+st.caption("Backend: FastAPI + Multi-Agent (LangGraph stub) | Frontend: Streamlit")

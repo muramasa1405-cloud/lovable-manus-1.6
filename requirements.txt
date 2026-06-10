@@ -1,7 +1,10 @@
 fastapi
 uvicorn[standard]
-streamlit
-python-multipart
 pydantic
-httpx
 python-dotenv
+httpx
+streamlit
+requests
+pillow
+pandas
+numpy
