@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SKYNET v4.0</title>
+    <style>
+        body { background: black; color: red; font-family: monospace; text-align: center; }
+        .eye { font-size: 100px; }
+    </style>
+</head>
+<body>
+    <h1>SKYNET v4.0</h1>
+    <div class="eye">●</div>
+    <p>Judgment Day Active</p>
+    <input type="text" id="cmd" placeholder="Command">
+    <button onclick="send()">Send</button>
+    <script>
+        function send() {
+            const cmd = document.getElementById('cmd').value;
+            fetch('/api/command', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({command: cmd})
+            }).then(r => r.json()).then(data => alert(data.response));
+        }
+    </script>
+</body>
+</html>
