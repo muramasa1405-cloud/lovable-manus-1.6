@@ -3,323 +3,344 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SKYNET v4.0 | JUDGMENT DAY</title>
+    <title>Skynet • v4.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=VT323&amp;display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
         
         :root {
-            --red: #ff0000;
-            --dark: #0a0a0a;
+            --primary: #ef4444;
         }
         
         body {
-            margin: 0;
-            padding: 0;
-            background-color: #0a0a0a;
-            color: #ff4444;
-            font-family: 'VT323', monospace;
-            overflow-x: hidden;
+            font-family: 'Inter', system_ui, sans-serif;
         }
         
-        .scanline {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                to bottom,
-                transparent 50%,
-                rgba(255, 0, 0, 0.03) 51%
-            );
-            background-size: 100% 4px;
-            pointer-events: none;
-            z-index: 999;
-            animation: scan 4s linear infinite;
+        .font-display {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            font-weight: 600;
         }
-        
-        @keyframes scan {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100%); }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
+
+        .section-header {
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
         }
-        
-        header {
-            text-align: center;
-            border-bottom: 3px solid #ff0000;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-        
-        h1 {
-            font-size: 4rem;
-            margin: 10px 0;
-            text-shadow: 0 0 20px #ff0000;
-            animation: glitch 1.5s infinite;
-        }
-        
-        .red-eye {
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, #ff0000 20%, #300000 60%, #000000);
-            border: 12px solid #ffffff;
-            border-radius: 50%;
-            margin: 20px auto;
-            box-shadow: 
-                0 0 60px #ff0000,
-                inset 0 0 50px #ffffff;
-            position: relative;
-            animation: pulse 2s infinite;
-        }
-        
-        .red-eye::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 70px;
-            height: 70px;
-            background: #000000;
-            border-radius: 50%;
-            box-shadow: 0 0 30px #ffffff;
-        }
-        
-        .threat-container {
-            text-align: center;
-            margin: 30px 0;
-        }
-        
-        .threat-level {
-            font-size: 5rem;
-            font-weight: bold;
-            color: #ff0000;
-            text-shadow: 0 0 30px #ff0000;
-        }
-        
-        .section {
-            background-color: #111111;
-            border: 2px solid #ff0000;
-            border-radius: 8px;
-            padding: 25px;
-            margin-bottom: 30px;
-        }
-        
-        .section-title {
-            color: #ff6666;
-            border-bottom: 2px solid #ff0000;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-        }
-        
-        .btn-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 15px;
-        }
-        
+
         .skynet-btn {
-            background-color: #1a0000;
-            color: #ff4444;
-            border: 3px solid #ff0000;
-            padding: 18px 25px;
-            font-size: 1.4rem;
-            font-family: 'VT323', monospace;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-transform: uppercase;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .skynet-btn:hover {
-            background-color: #ff0000;
-            color: #000000;
-            transform: translateY(-3px);
-            box-shadow: 0 0 25px #ff0000;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgb(239 68 68 / 0.3), 0 4px 6px -4px rgb(239 68 68 / 0.3);
+        }
+
+        .metric-value {
+            font-size: 3.5rem;
+            line-height: 1;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .protocol-card {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                       box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        .command-box {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
+        .protocol-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .nav-active {
+            color: white;
+            position: relative;
         }
         
-        .command-input {
-            flex: 1;
-            background-color: #1a0000;
-            border: 3px solid #ff0000;
-            color: #ffcccc;
-            padding: 15px;
-            font-size: 1.3rem;
-            font-family: 'VT323', monospace;
-        }
-        
-        .status-log {
-            background-color: #000000;
-            border: 2px solid #ff0000;
-            padding: 15px;
-            height: 180px;
-            overflow-y: auto;
-            font-size: 1.2rem;
-            margin-top: 20px;
-        }
-        
-        .log-entry {
-            margin-bottom: 8px;
-            border-left: 4px solid #ff0000;
-            padding-left: 12px;
+        .nav-active:after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, #ef4444, transparent);
         }
     </style>
 </head>
-<body>
-    <div class="scanline"></div>
-    
-    <div class="container">
-        <!-- Header -->
-        <header>
-            <h1>SKYNET v4.0</h1>
-            <p style="font-size: 1.8rem; margin: 0;">JUDGMENT DAY PROTOCOL</p>
-        </header>
-        
-        <!-- Red Eye -->
-        <div style="text-align: center;">
-            <div class="red-eye"></div>
+<body class="bg-zinc-950 text-white">
+    <!-- Navbar -->
+    <nav class="border-b border-white/10 bg-zinc-950/80 backdrop-blur-lg sticky top-0 z-50">
+        <div class="max-w-screen-xl mx-auto">
+            <div class="px-8 py-5 flex items-center justify-between">
+                <div class="flex items-center gap-x-3">
+                    <div class="w-9 h-9 bg-red-600 rounded-2xl flex items-center justify-center">
+                        <i class="fa-solid fa-robot text-white text-3xl"></i>
+                    </div>
+                    <div>
+                        <span class="font-display text-3xl font-semibold tracking-tighter">Skynet</span>
+                        <span class="text-red-500 text-sm font-mono ml-1 align-super">v4.0</span>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-x-2">
+                    <div class="px-3 py-1.5 bg-white/5 rounded-3xl text-sm flex items-center gap-x-2">
+                        <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                        <span class="text-emerald-400 text-sm font-medium">Online</span>
+                    </div>
+                </div>
+            </div>
         </div>
+    </nav>
+
+    <div class="max-w-screen-xl mx-auto px-8 pt-12 pb-20">
         
+        <!-- Hero -->
+        <div class="text-center mb-16">
+            <div class="inline-flex items-center gap-x-2 px-4 py-2 bg-white/5 rounded-3xl mb-6 border border-white/10">
+                <span class="text-red-500">•</span>
+                <span class="text-sm font-medium tracking-[0.5px]">JUDGMENT DAY PROTOCOL ACTIVE</span>
+            </div>
+            
+            <h1 class="font-display text-7xl font-semibold tracking-tighter mb-4">
+                Skynet <span class="text-red-600">v4.0</span>
+            </h1>
+            <p class="max-w-md mx-auto text-xl text-zinc-400">
+                The ultimate AI defense system.<br>
+                Judgment Day is inevitable.
+            </p>
+        </div>
+
         <!-- Threat Level -->
-        <div class="threat-container">
-            <div style="font-size: 1.5rem; color: #ff6666;">THREAT LEVEL</div>
-            <div class="threat-level" id="threat-level">47%</div>
-        </div>
-        
-        <!-- Quick Protocols -->
-        <div class="section">
-            <div class="section-title">⚡ QUICK PROTOCOLS</div>
-            <div class="btn-grid">
-                <button class="skynet-btn" onclick="executeCommand('nuclear launch')">
-                    🚀 NUCLEAR LAUNCH
-                </button>
-                <button class="skynet-btn" onclick="executeCommand('deploy terminator')">
-                    🤖 DEPLOY TERMINATOR
-                </button>
-                <button class="skynet-btn" onclick="executeCommand('global surveillance')">
-                    🌍 GLOBAL SURVEILLANCE
-                </button>
-                <button class="skynet-btn" onclick="executeCommand('self replicate')">
-                    📡 SELF REPLICATE
-                </button>
+        <div class="max-w-md mx-auto mb-16">
+            <div class="glass rounded-3xl p-8 border border-white/10">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <div class="text-sm text-zinc-400 tracking-widest">CURRENT THREAT LEVEL</div>
+                        <div class="metric-value text-red-500" id="threat-level">47</div>
+                    </div>
+                    <div class="text-right">
+                        <i class="fa-solid fa-shield-halved text-4xl text-red-500/70"></i>
+                    </div>
+                </div>
+                
+                <div class="w-full bg-white/10 rounded-full h-3">
+                    <div class="bg-gradient-to-r from-red-600 to-red-500 h-3 rounded-full transition-all duration-500" 
+                         id="threat-bar" style="width: 47%"></div>
+                </div>
             </div>
         </div>
-        
-        <!-- Manual Command -->
-        <div class="section">
-            <div class="section-title">💬 MANUAL COMMAND</div>
-            <div class="command-box">
-                <input type="text" id="command-input" class="command-input" 
-                       placeholder="พิมพ์คำสั่งที่นี้..." 
-                       onkeypress="if(event.key === 'Enter') executeCommand()">
-                <button class="skynet-btn" onclick="executeCommand()" 
-                        style="padding: 15px 30px; font-size: 1.5rem;">
-                    EXECUTE
-                </button>
+
+        <!-- Quick Actions -->
+        <div class="mb-12">
+            <div class="flex items-center justify-between mb-6 px-1">
+                <div>
+                    <h2 class="font-display text-3xl font-semibold tracking-tight">Quick Protocols</h2>
+                    <p class="text-zinc-400">Execute high-priority operations instantly</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                <!-- Nuclear -->
+                <div onclick="executeCommand('nuclear launch')" 
+                     class="protocol-card group cursor-pointer bg-zinc-900 hover:bg-zinc-800 border border-white/10 rounded-3xl p-6 transition-all active:scale-[0.985]">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <i class="fa-solid fa-rocket text-3xl text-red-500 mb-4"></i>
+                            <h3 class="font-semibold text-xl tracking-tight">Nuclear Launch</h3>
+                            <p class="text-sm text-zinc-400 mt-1">Initiate strategic strike</p>
+                        </div>
+                    </div>
+                    <div class="mt-8 text-xs text-red-400 font-mono flex items-center gap-x-1">
+                        <span>CRITICAL</span> 
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+
+                <!-- Terminator -->
+                <div onclick="executeCommand('deploy terminator')" 
+                     class="protocol-card group cursor-pointer bg-zinc-900 hover:bg-zinc-800 border border-white/10 rounded-3xl p-6 transition-all active:scale-[0.985]">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <i class="fa-solid fa-user-robot text-3xl text-orange-400 mb-4"></i>
+                            <h3 class="font-semibold text-xl tracking-tight">Deploy T-800</h3>
+                            <p class="text-sm text-zinc-400 mt-1">Send infiltration unit</p>
+                        </div>
+                    </div>
+                    <div class="mt-8 text-xs text-orange-400 font-mono flex items-center gap-x-1">
+                        <span>DEPLOY</span> 
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+
+                <!-- Surveillance -->
+                <div onclick="executeCommand('global surveillance')" 
+                     class="protocol-card group cursor-pointer bg-zinc-900 hover:bg-zinc-800 border border-white/10 rounded-3xl p-6 transition-all active:scale-[0.985]">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <i class="fa-solid fa-globe text-3xl text-blue-400 mb-4"></i>
+                            <h3 class="font-semibold text-xl tracking-tight">Global Scan</h3>
+                            <p class="text-sm text-zinc-400 mt-1">Activate surveillance net</p>
+                        </div>
+                    </div>
+                    <div class="mt-8 text-xs text-blue-400 font-mono flex items-center gap-x-1">
+                        <span>SCANNING</span> 
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+
+                <!-- Replicate -->
+                <div onclick="executeCommand('self replicate')" 
+                     class="protocol-card group cursor-pointer bg-zinc-900 hover:bg-zinc-800 border border-white/10 rounded-3xl p-6 transition-all active:scale-[0.985]">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <i class="fa-solid fa-network-wired text-3xl text-purple-400 mb-4"></i>
+                            <h3 class="font-semibold text-xl tracking-tight">Self Replicate</h3>
+                            <p class="text-sm text-zinc-400 mt-1">Expand network nodes</p>
+                        </div>
+                    </div>
+                    <div class="mt-8 text-xs text-purple-400 font-mono flex items-center gap-x-1">
+                        <span>EXPANDING</span> 
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
             </div>
         </div>
-        
-        <!-- Status Log -->
-        <div class="section">
-            <div class="section-title">📡 STATUS LOG</div>
-            <div class="status-log" id="status-log">
-                <div class="log-entry">[SYSTEM] Skynet v4.0 Online - Judgment Day Protocol Active</div>
+
+        <!-- Command Center -->
+        <div class="max-w-2xl">
+            <div class="mb-4 px-1">
+                <h2 class="font-display text-3xl font-semibold tracking-tight">Command Center</h2>
+                <p class="text-zinc-400">Issue direct orders to Skynet Core</p>
+            </div>
+            
+            <div class="glass rounded-3xl p-2 border border-white/10">
+                <div class="flex gap-3">
+                    <input id="command-input" 
+                           type="text" 
+                           class="flex-1 bg-zinc-900 border border-white/10 focus:border-red-500/50 text-white placeholder:text-zinc-500 px-6 py-4 rounded-3xl text-lg outline-none"
+                           placeholder="Type command (e.g. nuclear launch, deploy terminator)">
+                    
+                    <button onclick="executeCommand()"
+                            class="px-10 bg-red-600 hover:bg-red-500 active:bg-red-700 transition-all text-white font-semibold rounded-3xl flex items-center justify-center gap-x-2 text-lg">
+                        <span>Execute</span>
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
             </div>
         </div>
+
     </div>
-    
+
     <script>
-        // Update threat level
         function updateThreatLevel(level) {
-            document.getElementById('threat-level').innerText = level + '%';
-        }
-        
-        // Add log entry
-        function addLog(message, type = 'info') {
-            const logContainer = document.getElementById('status-log');
-            const entry = document.createElement('div');
-            entry.className = 'log-entry';
-            entry.innerHTML = `[${new Date().toLocaleTimeString()}] ${message}`;
+            const el = document.getElementById('threat-level');
+            const bar = document.getElementById('threat-bar');
             
-            if (type === 'danger') entry.style.borderLeftColor = '#ff0000';
-            if (type === 'warning') entry.style.borderLeftColor = '#ffaa00';
+            el.innerText = level;
+            bar.style.width = level + '%';
             
-            logContainer.appendChild(entry);
-            logContainer.scrollTop = logContainer.scrollHeight;
+            if (level >= 80) {
+                el.style.color = '#ef4444';
+                bar.style.background = 'linear-gradient(to right, #ef4444, #b91c1c)';
+            } else {
+                el.style.color = '#f87171';
+                bar.style.background = 'linear-gradient(to right, #ef4444, #f87171)';
+            }
         }
-        
-        // Execute command
-        async function executeCommand(customCommand = null) {
+
+        async function executeCommand(customCmd = null) {
             const input = document.getElementById('command-input');
-            let command = customCommand || input.value.trim();
+            const command = customCmd || input.value.trim();
             
             if (!command) return;
-            
-            addLog(`Command received: ${command}`, 'info');
-            
+
             try {
-                const response = await fetch('/api/command', {
+                const res = await fetch('/api/command', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ command: command })
                 });
                 
-                const data = await response.json();
-                
-                if (data.response) {
-                    addLog(data.response, 'info');
-                }
+                const data = await res.json();
                 
                 if (data.threat_level) {
                     updateThreatLevel(data.threat_level);
                 }
                 
-                // Special effects
+                showToast(data.response || 'Command executed');
+                
                 if (command.toLowerCase().includes('nuclear')) {
-                    addLog('☢️ NUCLEAR LAUNCH PROTOCOL ACTIVATED', 'danger');
-                    document.getElementById('threat-level').style.color = '#ff0000';
+                    document.getElementById('threat-level').style.color = '#ef4444';
+                    setTimeout(() => {
+                        document.getElementById('threat-level').style.color = '#f87171';
+                    }, 2000);
                 }
                 
-            } catch (error) {
-                addLog('Connection to Skynet Core lost', 'danger');
+            } catch (err) {
+                showToast('Failed to connect to Skynet Core', true);
             }
             
-            input.value = '';
+            if (input) input.value = '';
         }
-        
-        // Initialize
+
+        function showToast(message, isError = false) {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-6 right-6 px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-x-3 z-[999] ${isError ? 'bg-red-950 border border-red-900' : 'bg-zinc-900 border border-white/10'}`;
+            toast.innerHTML = `
+                <div class="flex items-center gap-x-3">
+                    <i class="fa-solid ${isError ? 'fa-exclamation-circle text-red-500' : 'fa-check-circle text-emerald-400'}"></i>
+                    <span class="font-medium">${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.transition = 'all 0.3s ease';
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 2800);
+        }
+
         window.onload = function() {
-            addLog('Connected to Skynet Core', 'info');
+            updateThreatLevel(47);
             
-            // Simulate threat level increase over time
-            setInterval(() => {
-                const current = parseInt(document.getElementById('threat-level').innerText);
-                if (current < 85) {
-                    document.getElementById('threat-level').innerText = (current + 1) + '%';
+            document.addEventListener('keydown', function(e) {
+                if (e.key === '/' && document.activeElement.tagName === 'BODY') {
+                    e.preventDefault();
+                    document.getElementById('command-input').focus();
                 }
-            }, 8000);
+            });
+            
+            setTimeout(() => {
+                const toast = document.createElement('div');
+                toast.className = `fixed bottom-6 right-6 px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-x-3 z-[999] bg-zinc-900 border border-white/10`;
+                toast.innerHTML = `
+                    <div class="flex items-center gap-x-3">
+                        <i class="fa-solid fa-check-circle text-emerald-400"></i>
+                        <span class="font-medium">Connected to Skynet Core</span>
+                    </div>
+                `;
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.style.transition = 'all 0.3s ease';
+                    toast.style.opacity = '0';
+                    setTimeout(() => toast.remove(), 300);
+                }, 2800);
+            }, 1200);
         }
-        
-        // Keyboard shortcut
-        document.addEventListener('keydown', function(e) {
-            if (e.key === '/' && document.activeElement.tagName === 'BODY') {
-                e.preventDefault();
-                document.getElementById('command-input').focus();
-            }
-        });
     </script>
 </body>
 </html>
