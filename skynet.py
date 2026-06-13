@@ -10,9 +10,18 @@ class Skynet:
         self.threat_level = 0
         try:
             self.engine = pyttsx3.init()
-            self.engine.setProperty('rate', 145)
-            self.engine.setProperty('volume', 0.95)
-        except:
+            # ปรับแต่งเสียงให้ดีขึ้น
+            self.engine.setProperty('rate', 155)          # ความเร็วในการพูด (ยิ่ง 120-200)
+            self.engine.setProperty('volume', 1.0)        # เสียงดัง (สูงสุด 1.0)
+            
+            # พยายามเลือก voice ที่ดีที่สุด (Linux มักใช้ espeak)
+            voices = self.engine.getProperty('voices')
+            for voice in voices:
+                if 'thai' in voice.name.lower() or 'th' in voice.id.lower():
+                    self.engine.setProperty('voice', voice.id)
+                    break
+        except Exception as e:
+            print(f"Voice init error: {e}")
             self.engine = None
 
     def speak(self, text, lang="th"):
