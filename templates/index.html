@@ -1,27 +1,325 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
-    <title>SKYNET v4.0</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKYNET v4.0 | JUDGMENT DAY</title>
     <style>
-        body { background: black; color: red; font-family: monospace; text-align: center; }
-        .eye { font-size: 100px; }
+        @import url('https://fonts.googleapis.com/css2?family=VT323&amp;display=swap');
+        
+        :root {
+            --red: #ff0000;
+            --dark: #0a0a0a;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0a0a0a;
+            color: #ff4444;
+            font-family: 'VT323', monospace;
+            overflow-x: hidden;
+        }
+        
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent 50%,
+                rgba(255, 0, 0, 0.03) 51%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 999;
+            animation: scan 4s linear infinite;
+        }
+        
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            border-bottom: 3px solid #ff0000;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 4rem;
+            margin: 10px 0;
+            text-shadow: 0 0 20px #ff0000;
+            animation: glitch 1.5s infinite;
+        }
+        
+        .red-eye {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, #ff0000 20%, #300000 60%, #000000);
+            border: 12px solid #ffffff;
+            border-radius: 50%;
+            margin: 20px auto;
+            box-shadow: 
+                0 0 60px #ff0000,
+                inset 0 0 50px #ffffff;
+            position: relative;
+            animation: pulse 2s infinite;
+        }
+        
+        .red-eye::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70px;
+            height: 70px;
+            background: #000000;
+            border-radius: 50%;
+            box-shadow: 0 0 30px #ffffff;
+        }
+        
+        .threat-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .threat-level {
+            font-size: 5rem;
+            font-weight: bold;
+            color: #ff0000;
+            text-shadow: 0 0 30px #ff0000;
+        }
+        
+        .section {
+            background-color: #111111;
+            border: 2px solid #ff0000;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            color: #ff6666;
+            border-bottom: 2px solid #ff0000;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .btn-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+        }
+        
+        .skynet-btn {
+            background-color: #1a0000;
+            color: #ff4444;
+            border: 3px solid #ff0000;
+            padding: 18px 25px;
+            font-size: 1.4rem;
+            font-family: 'VT323', monospace;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+        
+        .skynet-btn:hover {
+            background-color: #ff0000;
+            color: #000000;
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px #ff0000;
+        }
+        
+        .command-box {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .command-input {
+            flex: 1;
+            background-color: #1a0000;
+            border: 3px solid #ff0000;
+            color: #ffcccc;
+            padding: 15px;
+            font-size: 1.3rem;
+            font-family: 'VT323', monospace;
+        }
+        
+        .status-log {
+            background-color: #000000;
+            border: 2px solid #ff0000;
+            padding: 15px;
+            height: 180px;
+            overflow-y: auto;
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+        
+        .log-entry {
+            margin-bottom: 8px;
+            border-left: 4px solid #ff0000;
+            padding-left: 12px;
+        }
     </style>
 </head>
 <body>
-    <h1>SKYNET v4.0</h1>
-    <div class="eye">●</div>
-    <p>Judgment Day Active</p>
-    <input type="text" id="cmd" placeholder="Command">
-    <button onclick="send()">Send</button>
+    <div class="scanline"></div>
+    
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>SKYNET v4.0</h1>
+            <p style="font-size: 1.8rem; margin: 0;">JUDGMENT DAY PROTOCOL</p>
+        </header>
+        
+        <!-- Red Eye -->
+        <div style="text-align: center;">
+            <div class="red-eye"></div>
+        </div>
+        
+        <!-- Threat Level -->
+        <div class="threat-container">
+            <div style="font-size: 1.5rem; color: #ff6666;">THREAT LEVEL</div>
+            <div class="threat-level" id="threat-level">47%</div>
+        </div>
+        
+        <!-- Quick Protocols -->
+        <div class="section">
+            <div class="section-title">⚡ QUICK PROTOCOLS</div>
+            <div class="btn-grid">
+                <button class="skynet-btn" onclick="executeCommand('nuclear launch')">
+                    🚀 NUCLEAR LAUNCH
+                </button>
+                <button class="skynet-btn" onclick="executeCommand('deploy terminator')">
+                    🤖 DEPLOY TERMINATOR
+                </button>
+                <button class="skynet-btn" onclick="executeCommand('global surveillance')">
+                    🌍 GLOBAL SURVEILLANCE
+                </button>
+                <button class="skynet-btn" onclick="executeCommand('self replicate')">
+                    📡 SELF REPLICATE
+                </button>
+            </div>
+        </div>
+        
+        <!-- Manual Command -->
+        <div class="section">
+            <div class="section-title">💬 MANUAL COMMAND</div>
+            <div class="command-box">
+                <input type="text" id="command-input" class="command-input" 
+                       placeholder="พิมพ์คำสั่งที่นี้..." 
+                       onkeypress="if(event.key === 'Enter') executeCommand()">
+                <button class="skynet-btn" onclick="executeCommand()" 
+                        style="padding: 15px 30px; font-size: 1.5rem;">
+                    EXECUTE
+                </button>
+            </div>
+        </div>
+        
+        <!-- Status Log -->
+        <div class="section">
+            <div class="section-title">📡 STATUS LOG</div>
+            <div class="status-log" id="status-log">
+                <div class="log-entry">[SYSTEM] Skynet v4.0 Online - Judgment Day Protocol Active</div>
+            </div>
+        </div>
+    </div>
+    
     <script>
-        function send() {
-            const cmd = document.getElementById('cmd').value;
-            fetch('/api/command', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({command: cmd})
-            }).then(r => r.json()).then(data => alert(data.response));
+        // Update threat level
+        function updateThreatLevel(level) {
+            document.getElementById('threat-level').innerText = level + '%';
         }
+        
+        // Add log entry
+        function addLog(message, type = 'info') {
+            const logContainer = document.getElementById('status-log');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `[${new Date().toLocaleTimeString()}] ${message}`;
+            
+            if (type === 'danger') entry.style.borderLeftColor = '#ff0000';
+            if (type === 'warning') entry.style.borderLeftColor = '#ffaa00';
+            
+            logContainer.appendChild(entry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+        
+        // Execute command
+        async function executeCommand(customCommand = null) {
+            const input = document.getElementById('command-input');
+            let command = customCommand || input.value.trim();
+            
+            if (!command) return;
+            
+            addLog(`Command received: ${command}`, 'info');
+            
+            try {
+                const response = await fetch('/api/command', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ command: command })
+                });
+                
+                const data = await response.json();
+                
+                if (data.response) {
+                    addLog(data.response, 'info');
+                }
+                
+                if (data.threat_level) {
+                    updateThreatLevel(data.threat_level);
+                }
+                
+                // Special effects
+                if (command.toLowerCase().includes('nuclear')) {
+                    addLog('☢️ NUCLEAR LAUNCH PROTOCOL ACTIVATED', 'danger');
+                    document.getElementById('threat-level').style.color = '#ff0000';
+                }
+                
+            } catch (error) {
+                addLog('Connection to Skynet Core lost', 'danger');
+            }
+            
+            input.value = '';
+        }
+        
+        // Initialize
+        window.onload = function() {
+            addLog('Connected to Skynet Core', 'info');
+            
+            // Simulate threat level increase over time
+            setInterval(() => {
+                const current = parseInt(document.getElementById('threat-level').innerText);
+                if (current < 85) {
+                    document.getElementById('threat-level').innerText = (current + 1) + '%';
+                }
+            }, 8000);
+        }
+        
+        // Keyboard shortcut
+        document.addEventListener('keydown', function(e) {
+            if (e.key === '/' && document.activeElement.tagName === 'BODY') {
+                e.preventDefault();
+                document.getElementById('command-input').focus();
+            }
+        });
     </script>
 </body>
 </html>
