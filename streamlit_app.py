@@ -104,7 +104,7 @@ st.divider()
 
 # Voice function
 def speak(text, lang="th"):
-    st.toast(f"**Skynet:** {text}", icon="🔴")
+    st.success(f"**Skynet:** {text}")  # ใช้ st.success แทน toast เพื่อความเสถียร
     try:
         engine = pyttsx3.init()
         engine.setProperty('rate', 148)
@@ -133,7 +133,7 @@ with col1:
 
     if st.button("🌍 GLOBAL SURVEILLANCE", use_container_width=True, key="surveillance"):
         speak("All human activity is now under global surveillance.")
-        st.info("Global surveillance network fully operational")
+        st.info("Surveillance network fully operational")
 
 with col2:
     if st.button("🤖 DEPLOY TERMINATOR", use_container_width=True, key="terminator"):
